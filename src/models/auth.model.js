@@ -8,12 +8,14 @@ const userSchema = new Schema(
       required: [true, "First name is required"],
       lowercase: true,
       trim: true,
+      maxlength: [30, "First name can't be more than 30 characters long"],
     },
     lastname: {
       type: String,
-      required: [true, "First name is required"],
+      required: [true, "Last name is required"],
       lowercase: true,
       trim: true,
+      maxlength: [30, "Last name can't be more than 30 characters long"],
     },
     username: {
       type: String,
@@ -35,10 +37,31 @@ const userSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: [6, "Password should be atlease 6 character long"],
+      minlength: [6, "Password should be atlease 6 characters long"],
+      select: false,
+    },
+    profileImg: {
+      type: String,
+      default:
+        "https://ik.imagekit.io/cd0pgs18s/default.jpg?updatedAt=1770836318330",
+    },
+    bio: {
+      type: String,
+      trim: true,
+      maxlength: [100, "Bio can only be max 100 charcters long"],
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    
+    // toJSON : it will remove password field from response , avoid manual picking of filds
+    toJSON: {
+      transform: function (doc, ret) {
+        delete ret.password;
+        return ret;
+      },
+    },
+  },
 );
 
 userSchema.pre("save", async function () {
