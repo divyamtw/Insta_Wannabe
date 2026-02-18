@@ -48,12 +48,13 @@ const userSchema = new Schema(
     bio: {
       type: String,
       trim: true,
+      default: "add bio",
       maxlength: [100, "Bio can only be max 100 charcters long"],
     },
   },
   {
     timestamps: true,
-    
+
     // toJSON : it will remove password field from response , avoid manual picking of filds
     toJSON: {
       transform: function (doc, ret) {
