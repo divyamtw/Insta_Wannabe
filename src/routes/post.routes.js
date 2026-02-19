@@ -1,5 +1,9 @@
 import express from "express";
-import { createPost } from "../controllers/post.controller.js";
+import {
+  createPost,
+  getAllPost,
+  getPostDetails,
+} from "../controllers/post.controller.js";
 import multer from "multer";
 import verifyUser from "../middlewares/auth.middlewar.js";
 
@@ -9,5 +13,7 @@ const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.post("/", verifyUser, upload.single("post-img"), createPost);
+router.get("/", verifyUser, getAllPost);
+router.get("/details/:postId", verifyUser, getPostDetails);
 
 export default router;
