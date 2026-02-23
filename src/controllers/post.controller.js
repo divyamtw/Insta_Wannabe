@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Post from "../models/post.model.js";
 import ImageKit from "@imagekit/nodejs";
 import { toFile } from "@imagekit/nodejs";
@@ -12,7 +13,7 @@ const createPost = async (req, res) => {
   try {
     const user = await User.findById(req?.user.userId);
     if (!user) {
-      return res.status(400).json({ message: "Unauthorized!" });
+      return res.status(401).json({ message: "Unauthorized!" });
     }
 
     let uploadedFile;
@@ -66,19 +67,23 @@ const getAllPost = async (req, res) => {
 
 const getPostDetails = async (req, res) => {
   try {
-    const userId = req?.user.userId;
-    const postId = req?.params;
+    const userId = req?.user.userId.trim();
+    const postId = req.params.postId.trim();
 
-    const post = Post.findById(postId);
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+      return res.status(400).json({ message: "Invalid post id" });
+    }
+
+    const post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({ message: "Post not found!" });
     }
 
-    const isValidUser = post.user.toString() === userId;
+    // const isValidUser = post.user.toString() === userId;
 
-    if (!isValidUser) {
-      return res.status(403).json({ message: "Forbidden Content" });
-    }
+    // if (!isValidUser) {
+    //   return res.status(403).json({ message: "Forbidden Content" });
+    // }
 
     return res
       .status(200)
@@ -93,13 +98,17 @@ const getPostDetails = async (req, res) => {
 const likePost = async (req, res) => {
   try {
     const userId = req?.user.userId.trim();
-    const postId = req?.params.postId.trim();
+    const postId = req.params.postId.trim();
 
-    const isPostExists = await Post.findById(postId);
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+      return res.status(400).json({ message: "Invalid post id" });
+    }
+
+    const isPostExists = await Post.exists({ _id: postId });
     if (!isPostExists) {
       return res
         .status(404)
-        .json({ message: "Post you are trying to like does not exists" });
+        .json({ message: "Post you are trying to like does not exist" });
     }
 
     const isPostAlreadyLiked = await Like.findOne({
@@ -108,9 +117,7 @@ const likePost = async (req, res) => {
     });
 
     if (isPostAlreadyLiked) {
-      return res
-        .status(400)
-        .json({ message: "Post is already liked", post: postId });
+      return res.status(409).json({ message: "Post already liked" });
     }
 
     const like = await Like.create({
@@ -134,7 +141,11 @@ const likePost = async (req, res) => {
 const unLikePost = async (req, res) => {
   try {
     const userId = req?.user.userId.trim();
-    const postId = req?.params.postId.trim();
+    const postId = req.params.postId.trim();
+
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
+      return res.status(400).json({ message: "Invalid post id" });
+    }
 
     const isPostExists = await Post.findById(postId);
     if (!isPostExists) {
@@ -149,8 +160,8 @@ const unLikePost = async (req, res) => {
     });
 
     if (!isPostLiked) {
-      return res.status(200).json({
-        messag: "Post you are trying to unlike is not liked",
+      return res.status(409).json({
+        message: "Post is not liked",
         post: postId,
       });
     }
@@ -160,7 +171,7 @@ const unLikePost = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ messag: "Something went wrong while unliking post" });
+      .json({ message: "Something went wrong while unliking post" });
   }
 };
 
