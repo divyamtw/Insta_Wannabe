@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Connection
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
@@ -12,5 +13,18 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
+
+//  Connection Events
+mongoose.connection.on("connected", () => {
+  console.log("MongoDB connected event fired");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.log("MongoDB connection error:", err);
+});
+
+mongoose.connection.on("disconnected", () => {
+  console.log("MongoDB disconnected");
+});
 
 export default connectDB;
