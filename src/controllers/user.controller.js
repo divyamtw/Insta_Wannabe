@@ -4,8 +4,8 @@ import Follow from "../models/follow.model.js";
 
 const followUser = async (req, res) => {
   try {
-    const followerId = req.user.userId.trim();
-    const followeeId = req.params.userId.trim();
+    const followerId = req?.user.userId.trim();
+    const followeeId = req?.params.userId.trim();
 
     if (!mongoose.Types.ObjectId.isValid(followeeId)) {
       return res.status(400).json({ message: "Invalid user id" });
@@ -53,8 +53,8 @@ const followUser = async (req, res) => {
 
 const unfollowUser = async (req, res) => {
   try {
-    const followerId = req.user.userId.trim();
-    const followeeId = req.params.userId.trim();
+    const followerId = req?.user.userId.trim();
+    const followeeId = req?.params.userId.trim();
 
     if (!mongoose.Types.ObjectId.isValid(followeeId)) {
       return res.status(400).json({ message: "Invalid user id" });

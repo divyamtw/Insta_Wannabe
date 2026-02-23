@@ -2,6 +2,7 @@ import Post from "../models/post.model.js";
 import ImageKit from "@imagekit/nodejs";
 import { toFile } from "@imagekit/nodejs";
 import User from "../models/auth.model.js";
+import Like from "../models/like.model.js";
 
 const imagekit = new ImageKit({
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
@@ -66,7 +67,7 @@ const getAllPost = async (req, res) => {
 const getPostDetails = async (req, res) => {
   try {
     const userId = req?.user.userId;
-    const postId = req.params;
+    const postId = req?.params;
 
     const post = Post.findById(postId);
     if (!post) {
@@ -89,4 +90,47 @@ const getPostDetails = async (req, res) => {
   }
 };
 
-export { createPost, getAllPost, getPostDetails };
+const likePost = async (req, res) => {
+  try {
+    const userId = req?.user.userId.trim();
+    const postId = req?.params.postId.trim();
+
+    const isPostExists = await Post.findById(postId);
+    if (!isPostExists) {
+      return res
+        .status(404)
+        .json({ message: "Post you are trying to like does not exists" });
+    }
+
+    const isPostAlreadyLiked = await Like.findOne({
+      post: postId,
+      user: userId,
+    });
+
+    if (isPostAlreadyLiked) {
+      return res
+        .status(400)
+        .json({ message: "Post is already liked", post: postId });
+    }
+
+    const like = await Like.create({
+      post: postId,
+      user: userId,
+    });
+
+    if (like) {
+      return res.status(200).json({
+        message: "Post liked successfully",
+        post: postId,
+      });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Something went wrong while liking the post" });
+  }
+};
+
+const unLikePost = async (req, res) => {};
+
+export { createPost, getAllPost, getPostDetails, likePost, unLikePost };
