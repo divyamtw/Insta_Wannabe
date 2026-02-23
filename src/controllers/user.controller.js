@@ -51,4 +51,36 @@ const followUser = async (req, res) => {
   }
 };
 
-export { followUser };
+const unfollowUser = async (req, res) => {
+  try {
+    const followerId = req.user.userId.trim();
+    const followeeId = req.params.userId.trim();
+
+    if (!mongoose.Types.ObjectId.isValid(followeeId)) {
+      return res.status(400).json({ message: "Invalid user id" });
+    }
+
+    const isUserFollowing = await Follow.findOne({
+      follower: followerId,
+      followee: followeeId,
+    });
+
+    if (!isUserFollowing) {
+      return res
+        .status(200)
+        .json({ message: `You are not following ${followeeId}` });
+    }
+
+    await Follow.findByIdAndDelete(isUserFollowing._id);
+
+    return res
+      .status(200)
+      .json({ message: `You have un-followed ${followeeId}` });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Something went wrong while un-following user" });
+  }
+};
+
+export { followUser, unfollowUser };
