@@ -131,6 +131,37 @@ const likePost = async (req, res) => {
   }
 };
 
-const unLikePost = async (req, res) => {};
+const unLikePost = async (req, res) => {
+  try {
+    const userId = req?.user.userId.trim();
+    const postId = req?.params.postId.trim();
+
+    const isPostExists = await Post.findById(postId);
+    if (!isPostExists) {
+      return res
+        .status(404)
+        .json({ message: "Post you are trying to like does not exists" });
+    }
+
+    const isPostLiked = await Like.findOne({
+      post: postId,
+      user: userId,
+    });
+
+    if (!isPostLiked) {
+      return res.status(200).json({
+        messag: "Post you are trying to unlike is not liked",
+        post: postId,
+      });
+    }
+    await Like.findByIdAndDelete(isPostLiked._id);
+
+    return res.status(200).json({ message: "Post unliked successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ messag: "Something went wrong while unliking post" });
+  }
+};
 
 export { createPost, getAllPost, getPostDetails, likePost, unLikePost };
