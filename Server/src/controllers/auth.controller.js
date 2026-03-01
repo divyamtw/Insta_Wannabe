@@ -17,6 +17,12 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: "All fields are required!" });
     }
 
+    if (password.trim().length < 6) {
+      return res
+        .status(400)
+        .json({ message: "Password should be at least 6 characters long." });
+    }
+
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedUsername = username.trim().toLowerCase();
 

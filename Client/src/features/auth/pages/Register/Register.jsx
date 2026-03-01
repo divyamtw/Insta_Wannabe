@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router";
+import style from "./Register.module.scss";
 
 const formSchema = z.object({
   firstname: z
@@ -17,27 +20,37 @@ const formSchema = z.object({
     .max(20),
   username: z.string().min(3, { message: "Username must be unique." }),
   email: z.email({ message: "Enter valid email." }),
-  password: z.string().min(4, {
-    message: "Password should be atleast 4 characters long.",
-  }),
+  password: z
+    .string()
+    .min(6, { message: "Password should be at least 6 characters long." }),
 });
 
 const Register = () => {
   const {
     handleSubmit,
     register,
-    reset,
     formState: { errors },
   } = useForm({ resolver: zodResolver(formSchema) });
 
-  function submitForm(data) {
-    console.log(data);
-    reset();
-  }
+  const { loading, error, handleRegister } = useAuth();
+  const navigate = useNavigate();
+
+  const submitForm = async (data) => {
+    const { firstname, lastname, username, email, password } = data;
+    const success = await handleRegister(
+      firstname,
+      lastname,
+      username,
+      email,
+      password,
+    );
+    if (success) await navigate("/done");
+  };
 
   return (
     <>
       <form onSubmit={handleSubmit(submitForm)}>
+        {error && <p className={style.error}>{error}</p>}
         <div>
           <label htmlFor="first-name">First Name: </label>
           <input id="first-name" type="text" {...register("firstname")} />
@@ -63,7 +76,9 @@ const Register = () => {
           <input id="password" type="password" {...register("password")} />
           {errors.password && <span>{errors.password.message}</span>}
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Creating Account..." : "Create Account"}
+        </button>
       </form>
     </>
   );
