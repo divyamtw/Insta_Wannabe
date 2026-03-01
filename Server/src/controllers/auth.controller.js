@@ -70,7 +70,7 @@ const loginUser = async (req, res) => {
       "+password",
     );
     if (!user) {
-      return res.status(401).json({ message: "Invalid User Cedentials" });
+      return res.status(401).json({ message: "Invalid User Credentials" });
     }
 
     const isPasswordCorrect = user.isPasswordMatch(password.trim());
@@ -87,7 +87,7 @@ const loginUser = async (req, res) => {
       maxAge: 2 * 24 * 60 * 60 * 1000,
     });
 
-    return res.status(200).json({ message: "User login Successfully!" });
+    return res.status(200).json({ message: "User login Successfully!", user });
   } catch (error) {
     console.log(error.message);
     return res
