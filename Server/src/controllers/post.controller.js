@@ -175,4 +175,24 @@ const unLikePost = async (req, res) => {
   }
 };
 
-export { createPost, getAllPost, getPostDetails, likePost, unLikePost };
+const getFeed = async (_, res) => {
+  try {
+    const feed = await Post.find().populate("user");
+    return res
+      .status(200)
+      .json({ message: "Feed fetched successfully.", feed });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Something went wrong while fetching feed." });
+  }
+};
+
+export {
+  createPost,
+  getAllPost,
+  getPostDetails,
+  likePost,
+  unLikePost,
+  getFeed,
+};

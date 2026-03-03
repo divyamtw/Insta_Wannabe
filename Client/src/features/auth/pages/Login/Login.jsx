@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
-import style from "./Login.module.scss";
+import "./Login.scss";
 
 const formSchema = z.object({
   email: z.email({ message: "Enter valid email." }),
@@ -28,9 +28,9 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div className="container">
       <form onSubmit={handleSubmit(submitForm)}>
-        {error && <p className={style.error}>{error}</p>}
+        {error && <p className={`error`}>{error}</p>}
         <div>
           <label htmlFor="email">Email: </label>
           <input id="email" type="email" {...register("email")} />
@@ -45,7 +45,7 @@ const Login = () => {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-    </>
+    </div>
   );
 };
 
