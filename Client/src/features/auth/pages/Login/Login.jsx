@@ -1,7 +1,7 @@
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
-import { loginSchema } from "../../validations/schemas";
-import useZodForm from "../../hooks/useZodForm";
+import { loginSchema } from "../../../../shared/validations/schemas";
+import useZodForm from "../../../../shared/hooks/useZodForm";
 import "./Login.scss";
 
 const Login = () => {

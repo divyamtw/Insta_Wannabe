@@ -1,8 +1,8 @@
-import useZodForm from "../../hooks/useZodForm";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
+import { registerSchema } from "../../../../shared/validations/schemas";
+import useZodForm from "../../../../shared/hooks/useZodForm";
 import style from "./Register.module.scss";
-import { registerSchema } from "../../validations/schemas";
 
 const Register = () => {
   const {
