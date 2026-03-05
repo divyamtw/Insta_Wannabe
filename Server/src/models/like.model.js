@@ -5,7 +5,7 @@ const likeSchema = new Schema(
     post: {
       type: Schema.Types.ObjectId,
       ref: "posts",
-      requied: [true, "post id is required for creating a like"],
+      required: [true, "post id is required for creating a like"],
     },
     user: {
       type: Schema.Types.ObjectId,

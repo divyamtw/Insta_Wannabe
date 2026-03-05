@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { usePost } from "../hooks/usePost";
 
 const Feed = () => {
@@ -17,11 +17,21 @@ const Feed = () => {
   }
 
   return (
-    <div>
-      <h2>{feed[1].caption}</h2>
-      <h5>{feed[1].user.username}</h5>
-      <img src={feed[1].img} alt="img" height={200} />
-    </div>
+    <main>
+      <div className="feed">
+        <div className="post">
+          {feed.map((post) => (
+            <div key={post._id}>
+              <h3>{post.caption}</h3>
+              {post.img && (
+                <img src={post.img} alt={post.caption} height={400} />
+              )}
+              {post.isLiked && <p>Liked</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </main>
   );
 };
 

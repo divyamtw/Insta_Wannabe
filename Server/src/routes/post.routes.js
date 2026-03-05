@@ -18,7 +18,7 @@ const router = express.Router();
 router.post("/", verifyUser, upload.single("post-img"), createPost);
 router.get("/", verifyUser, getAllPost);
 router.get("/details/:postId", verifyUser, getPostDetails);
-router.get("/feed", getFeed);
+router.get("/feed", verifyUser, getFeed);
 
 // like , unlike router
 router.post("/like/:postId", verifyUser, likePost);

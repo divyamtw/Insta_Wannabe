@@ -175,13 +175,28 @@ const unLikePost = async (req, res) => {
   }
 };
 
-const getFeed = async (_, res) => {
+const getFeed = async (req, res) => {
+  const user = req.user;
+  console.log(user);
   try {
-    const feed = await Post.find().populate("user");
+    const posts = await Post.find().populate("user").lean();
+
+    const feed = await Promise.all(
+      posts.map(async (post) => {
+        const isLiked = await Like.findOne({
+          user: user.userId,
+          post: post._id,
+        });
+        post.isLiked = !!isLiked;
+        return post;
+      }),
+    );
+
     return res
       .status(200)
       .json({ message: "Feed fetched successfully.", feed });
   } catch (error) {
+    console.log(error.message);
     return res
       .status(500)
       .json({ message: "Something went wrong while fetching feed." });
