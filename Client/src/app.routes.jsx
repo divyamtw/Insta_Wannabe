@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Login, Register } from "./features/auth/pages/index.js";
-import Feed from "./features/post/pages/Feed.jsx";
+import { Feed, CreatePost } from "./features/post/pages/index.js";
 
 export const router = createBrowserRouter([
   {
@@ -14,5 +14,9 @@ export const router = createBrowserRouter([
   {
     path: `/register`,
     element: <Register />,
+  },
+  {
+    path: `/create-post`,
+    element: <CreatePost />,
   },
 ]);

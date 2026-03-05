@@ -1,11 +1,12 @@
 import { useEffect } from "react";
-import { usePost } from "../hooks/usePost";
+import { usePost } from "../../hooks/usePost";
 
 const Feed = () => {
   const { feed, loading, handleGetFeed } = usePost();
 
   useEffect(() => {
     handleGetFeed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading || !feed) {

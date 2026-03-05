@@ -1,24 +1,15 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
+import { loginSchema } from "../../validations/schemas";
+import useZodForm from "../../hooks/useZodForm";
 import "./Login.scss";
-
-const formSchema = z.object({
-  email: z.email({ message: "Enter valid email." }),
-  password: z
-    .string()
-    .min(4, { message: "Password should be atleast 4 characters long." }),
-});
 
 const Login = () => {
   const {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(formSchema) });
-
+  } = useZodForm(loginSchema);
   const { loading, error, handleLogin } = useAuth();
   const navigate = useNavigate();
 
@@ -30,7 +21,7 @@ const Login = () => {
   return (
     <div className="container">
       <form onSubmit={handleSubmit(submitForm)}>
-        {error && <p className={`error`}>{error}</p>}
+        {error && <p className="error">{error}</p>}
         <div>
           <label htmlFor="email">Email: </label>
           <input id="email" type="email" {...register("email")} />

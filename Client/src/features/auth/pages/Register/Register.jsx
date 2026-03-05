@@ -1,36 +1,15 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import useZodForm from "../../hooks/useZodForm";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
 import style from "./Register.module.scss";
-
-const formSchema = z.object({
-  firstname: z
-    .string()
-    .min(3, {
-      message: "First Name should be atleast 3 characters long.",
-    })
-    .max(20),
-  lastname: z
-    .string()
-    .min(3, {
-      message: "Last Name should be atleast 3 characters long.",
-    })
-    .max(20),
-  username: z.string().min(3, { message: "Username must be unique." }),
-  email: z.email({ message: "Enter valid email." }),
-  password: z
-    .string()
-    .min(6, { message: "Password should be at least 6 characters long." }),
-});
+import { registerSchema } from "../../validations/schemas";
 
 const Register = () => {
   const {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(formSchema) });
+  } = useZodForm(registerSchema);
 
   const { loading, error, handleRegister } = useAuth();
   const navigate = useNavigate();
@@ -44,7 +23,7 @@ const Register = () => {
       email,
       password,
     );
-    if (success) await navigate("/done");
+    if (success) await navigate("/");
   };
 
   return (

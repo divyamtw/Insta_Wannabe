@@ -177,10 +177,8 @@ const unLikePost = async (req, res) => {
 
 const getFeed = async (req, res) => {
   const user = req.user;
-  console.log(user);
   try {
     const posts = await Post.find().populate("user").lean();
-
     const feed = await Promise.all(
       posts.map(async (post) => {
         const isLiked = await Like.findOne({
