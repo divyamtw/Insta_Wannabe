@@ -1,10 +1,10 @@
-@use "../../../../shared/variables" as v;
+@use "../../../../shared/variables" as *;
 
 .main {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background-color: greenyellow;
-  color: black;
+  // background-color: greenyellow;
+  color: $text;
 }

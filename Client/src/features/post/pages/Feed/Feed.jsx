@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { usePost } from "../../hooks/usePost";
 import style from "./Feed.module.scss";
+import Post from "../../components/Post/Post";
 
 const Feed = () => {
   const { feed, loading, handleGetFeed } = usePost();
@@ -23,13 +24,7 @@ const Feed = () => {
       <div className={style.feed}>
         <div className={style.post}>
           {feed.map((post) => (
-            <div key={post._id}>
-              <h3>{post.caption}</h3>
-              {post.img && (
-                <img src={post.img} alt={post.caption} height={400} />
-              )}
-              {post.isLiked && <p>Liked</p>}
-            </div>
+            <Post key={post.id} {...post} />
           ))}
         </div>
       </div>

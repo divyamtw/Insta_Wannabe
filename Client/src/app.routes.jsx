@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Login, Register } from "./features/auth/pages/index.js";
 import { Feed, CreatePost } from "./features/post/pages/index.js";
-import Layout from "./Layout.jsx";
+import Post from "./features/post/components/Post/Post.jsx";
+import Layout from "../src/shared/components/Layout.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
       {
         path: "/create-post",
         element: <CreatePost />,
+      },
+      {
+        path: "/test",
+        element: <Post />,
       },
     ],
   },
