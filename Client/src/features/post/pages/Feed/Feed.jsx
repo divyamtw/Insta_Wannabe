@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { usePost } from "../../hooks/usePost";
-import Navbar from "../../../../shared/components/Navbar/Navbar";
 import style from "./Feed.module.scss";
 
 const Feed = () => {
@@ -13,16 +12,16 @@ const Feed = () => {
 
   if (loading || !feed) {
     return (
-      <main>
+      <main className={`loaderCenter`}>
         <h1>loading...</h1>
       </main>
     );
   }
 
   return (
-    <main className={style.main}>
-      <div className="feed">
-        <div className="post">
+    <div className={style.main}>
+      <div className={style.feed}>
+        <div className={style.post}>
           {feed.map((post) => (
             <div key={post._id}>
               <h3>{post.caption}</h3>
@@ -34,7 +33,7 @@ const Feed = () => {
           ))}
         </div>
       </div>
-    </main>
+    </div>
   );
 };
 

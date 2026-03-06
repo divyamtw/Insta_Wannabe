@@ -25,3 +25,17 @@ body {
   color: v.$text;
   user-select: none;
 }
+
+.loaderCenter {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mainContent {
+  padding-top: 6rem;
+  display: flex;
+  justify-content: center;
+}
